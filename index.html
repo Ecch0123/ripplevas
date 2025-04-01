@@ -1,0 +1,322 @@
+
+<!DOCTYPE html>
+<html lang="en">
+   
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Editor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js";
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+    
+
+
+   
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+   
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="index.css"> 
+</head>
+
+
+<body>
+
+    
+        <!-- Logo Section -->
+        <div id="logo" class="logo">
+            <a href="https://crm.theripplevas.com/" target="_blank">
+                <img src="Logo.png" alt="Logo">
+            </a>
+        </div>
+
+        <!-- Toggle Navbar -->
+        <div id="toggle" class="navbar1">
+            <div class="last">
+                <li><button onclick="toggleShapeNavbar()" title="Insert Shape">🖌️</button></li>
+                <li><button onclick="toggleTextAnnotationNavbar()" title="Text Annotations">📝</button></li>
+                <li><button onclick="uploadPDF()" class="upload" title="Upload PDF">📂 Upload File</button></li>
+                <li><button onclick="toggleMainNavbar()" title="Switch">Fill and Sign</button></li>
+            </div>
+
+
+            <div class="menu-container">
+                <div class="menu-icon" onclick="toggleMenu()">
+                    <i class="fas fa-bars"></i>
+                    <i class="fas fa-caret-down"></i>
+                </div>
+                <ul class="dropdown-menu" id="dropdown">
+                    <li>Send</li>
+                    <li>Actions</li>
+                    <li onclick="openShareModal()">Share or Send</li>
+                    <li>Document Audit</li>
+                    <li>Download / Export</li>
+                </ul>
+            </div>
+            
+        </div>
+
+
+
+         <!-- Modal -->
+    <div id="signModal" class="modal">
+        <span class="close-btn" onclick="closeSignModal()">&times;</span> 
+        <div class="modal-header">Share with Others</div>
+
+        <!-- Buttons -->
+        <div class="modal-buttons">
+            <button>📎 Send as Attachment</button>
+            <button onclick="openSignRequestModal()">Send Sign Request</button>
+            <button>🔗 Get Shareable Link</button>
+        </div>
+
+        <!-- Document Access Section -->
+        <div class="document-access">
+            <h4>📜 Privacy, Owner, and Folder</h4>
+            <span class="privacy-badge">Private</span>
+            <p>This document is private and owned by you. Only people you specify will be able to see this document.</p>
+        </div>
+
+        <!-- Collaborators Section -->
+        <div class="modal-footer">
+            <input type="email" placeholder="Enter email">
+            <button>Add</button>
+        </div>
+    </div>
+
+
+    <div id="signerContainer">
+        <h3>Signers List</h3>
+        <ul id="signerList"></ul> <!-- This must exist before JavaScript runs -->
+    </div>
+    
+
+    <div id="signRequestModal" class="request-modal">
+        <div class="request-modal-content">
+            <button class="close-btn">&times;</button>
+            <div class="request-modal-header">Send Sign Request</div>
+        
+            <div class="signer-container">
+                <label>Name</label>
+                <input type="text" id="signerName" placeholder="Name...">
+            </div>
+        
+            <div class="signer-container">
+                <label>Email</label>
+                <input type="email" id="signerEmail" placeholder="ripple@example.com...">
+             </div>
+        
+            <button class="add-signer">+ Add Signer</button>
+    
+            <div class="send-request-actions">
+                <button class="manage-fields-btn" onclick="manageFields()">Manage Fields</button>
+                <button class="send-request-btn" onclick="sendRequest()">Send Request</button>
+            </div>
+        </div>
+    </div>
+    
+    
+
+        <!-- Main Navbar -->
+        <div id="main-navbar" class="navbar">
+            <ul>
+                <li><button onclick="undo()" class="undo" title="Undo">↩</button></li>
+                <li><button onclick="redo()" class="redo" title="Redo">↪</button></li>
+                <li><button id="insertTextButton" onclick="insertText()" title="Insert Text">🔤</button></li>
+                <li><button id="download-btn" onclick="downloadAsPDF()" title="Download as PDF">📄</button></li>
+                <li><button onclick="startSigning()" title="Sign">✍</button></li>
+                <li><button id="stampButton" onclick="insertRubberStamp()" title="Insert Rubber Stamp">📬</button></li>
+                <li><button id="calendarButton" onclick="insertCalendar()" title="Insert Calendar">📅</button></li>
+                <li><button id="checkButton" onclick="insertCheckMark()" title="Insert Check Mark">✔</button></li>
+                <li><button id="xMarkButton" onclick="insertXMark()" title="Insert X Mark">❌</button></li>
+                <li><button id="dotButton" onclick="insertDotMark()" title="Insert Dot Mark">⚫</button></li>
+                <li><button id="eraserButton" onclick="activateEraser()" title="Eraser">🧽</button></li>
+            </ul>
+        </div>
+
+        <!-- Shape Toolbar -->
+        <div id="shape-navbar" class="navbar" style="display: none;">
+            <ul>
+                <li><button onclick="insertShape('rectangle')" title="Rectangle"><i class="far fa-square"></i></button></li>
+                <li><button onclick="insertShape('circle')" title="Circle"><i class="far fa-circle"></i></button></li>
+                <li><button onclick="insertShape('line')" title="Line"><i class="fas fa-minus"></i></button></li>
+                <li><button onclick="insertShape('arrow')" title="Arrow"><i class="fas fa-arrow-right"></i></button></li>
+                <li><button onclick="insertShape('pentagon')" title="Pentagon"><i class="fas fa-draw-polygon"></i></button></li>
+                <li><button onclick="insertShape('zigzag')" title="Zigzag Line"><i class="fas fa-wave-square"></i></button></li>
+            </ul>
+        </div>
+
+        <!-- Text Annotation Toolbar -->
+        <div id="text-annotation-navbar" class="navbar" style="display: none;">
+            <ul>
+                <li><button onclick="activateTool('Highlight')" title="Highlight"><i class="fas fa-highlighter"></i></button></li>
+                <li><button onclick="activateTool('Underline')" title="Underline"><i class="fas fa-text-height"></i></button></li>
+                <li><button onclick="activateTool('Strikeout')" title="Strikeout"><i class="fas fa-strikethrough"></i></button></li>
+                <li><button onclick="activateTool('Squiggly')" title="Squiggly Line"><i class="fas fa-wave-square"></i></button></li>
+                <li><button onclick="activateTool('Freehand')" title="Freehand Draw"><i class="fas fa-pencil-alt"></i></button></li>
+            </ul>
+        </div>
+
+        <div id="FileName"></div>    
+
+        <!-- Comments Panel -->
+        <div id="comments-panel" class="comments-panel hidden">
+            <div class="comments-header">
+                <h3>Comments</h3>
+            </div>
+            <div id="comments-list">
+                <!-- Comments dynamically added here -->
+            </div>
+            <div class="comment-input-section">
+                <input type="text" id="main-reply-input" placeholder="Add a comment..." />
+                <button id="send-comment"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+        <!-- File Upload Inputs -->
+        <input type="file" id="pdf-upload" accept="application/pdf" style="display: none;" onchange="handlePDFUpload(event)">
+        <input type="file" id="image-upload" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+
+        <div id="pdfContainer"></div>
+
+        <!-- Stamp Panel -->
+        <div id="stampsPanel" class="stamps-panel" style="display: none;">
+            <button onclick="createNewStamp()">Create New Stamp</button>
+            <h3>Standard Stamps</h3>
+            <div class="standard-stamps">
+                <div class="const"><button class="stamp approved" onclick="selectStamp('APPROVED')">APPROVED</button></div>
+                <div class="const"><button class="stamp as-is" onclick="selectStamp('AS IS')">AS IS</button></div>
+                <div class="const"><button class="stamp completed" onclick="selectStamp('COMPLETED')">COMPLETED</button></div>
+                <div class="const"><button class="stamp confidential" onclick="selectStamp('CONFIDENTIAL')">CONFIDENTIAL</button></div>
+                <div class="const"><button class="stamp departmental" onclick="selectStamp('DEPARTMENTAL')">DEPARTMENTAL</button></div>
+                <div class="const"><button class="stamp draft" onclick="selectStamp('DRAFT')">DRAFT</button></div>
+                <div class="const"><button class="stamp experimental" onclick="selectStamp('EXPERIMENTAL')">EXPERIMENTAL</button></div>
+                <div class="const"><button class="stamp expired" onclick="selectStamp('EXPIRED')">EXPIRED</button></div>
+                <div class="const"><button class="stamp final" onclick="selectStamp('FINAL')">FINAL</button></div>
+            </div>
+        </div>
+
+        <!-- Stamp Modal -->
+        <div id="stampModal" class="modal">
+            <div class="modal-content">
+                <span id="closeModal" class="close">&times;</span>
+                <h2>Create New Stamp</h2>
+
+                <label>Stamp Text*</label>
+                <input type="text" id="stampText" placeholder="Enter stamp text">
+
+                <label>Font Style</label>
+                <select id="fontStyle">
+                    <option value="Helvetica">Helvetica</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                </select>
+
+                <label>Text Color</label>
+                <input type="color" id="textColor" value="#000000">
+
+                <label>Background Color</label>
+                <input type="color" id="bgColor" value="#ffffff">
+
+                <label><input type="checkbox" id="timestamp"> Include Timestamp</label>
+
+                <button id="saveStamp">Save Stamp</button>
+            </div>
+        </div>
+        <div id="sidebar" class="sidebar">
+            <ul id="field-list">
+                <!-- Always Visible -->
+                <li id="text-field" onclick="selectField('text')">
+                    Text
+                    <button id="toggleSidebarBtn" onclick="toggleSidebar(event)">▼</button>
+
+                </li>
+                <li id="signature-field" onclick="selectField('signature')">Signature</li>
+                <li id="date-field" onclick="selectField('date')">Date</li>
+        
+                <!-- Toggleable Fields (Hidden by Default) -->
+                <li id="paragraph-field" onclick="selectField('paragraph')">Paragraph</li>
+                <li id="checkbox-field" onclick="selectField('checkbox')">Checkbox</li>
+                <li id="dropdown-field" onclick="selectField('dropdown')">Dropdown</li>
+                <li id="image-field" onclick="selectField('image')">Image</li>
+                <li id="attachment-field" onclick="selectField('attachment')">Attachment</li>
+                <li id="initials-field" onclick="selectField('initials')">Initials</li>
+            </ul>
+        </div>
+        
+        
+
+
+        <div class="right-menu" id="signRequestBtn">
+            <button class="prepare-sign-btn" onclick="preparesendRequest()">Prepare Sign Request</button>
+        
+            <div class="menu-tabs">
+                <button class="active-tab">Field</button>
+                <button>People</button>
+            </div>
+        
+            <div class="assign-fields">
+                <p>Who should complete this document?</p>
+                <label>
+                    <input type="checkbox"> I need to sign this document
+                </label>
+                <div class="email-input">
+                    <input type="email" placeholder="ripple@example.com">
+                    <button>Add</button>
+                </div>
+                
+                <div class="signer">
+                    <span class="signer-badge">RI</span> Ripple VAs 
+                    <p>required fields and optional fields</p>
+                </div>
+            </div>
+        
+            <div class="signing-info">
+                <img src="sign-icon.png" alt="sign-icon">
+                <p>Each person signs the same copy of this document.</p>
+            </div>
+        
+            <div class="assign-field-dropdown">
+                <label>This is where assigned field on this document going yo assign</label>
+                <select>
+                    <option>Ripple VAs</option>
+                </select>
+                <button>Assign  Field</button>
+            </div>
+        </div>
+        
+       
+
+
+       
+        </script>
+
+        <script src="function.js"></script>
+        <script src="design.js"></script>         
+        <script src="styletoolbar.js"></script>
+        <script src="toggle.js"></script>
+
+    </body>
+</html>
