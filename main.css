@@ -1,0 +1,221 @@
+.header{
+    background-color:dirtywhite;
+    color:black;
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid black;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+.upload button{
+    background-color: green;
+    color: white;
+    
+}
+.upload button:hover{
+    background-color:rgb(43, 193, 243);
+    color:black;
+}
+
+
+.navbar {
+    flex: 0 0 15%; /* Adjust width */
+    background-color: lightgrey;
+    color: black;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-right: 1px solid black;
+    height: 100vh;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+button {
+    display: flex;
+    align-items: center;  /* Align icon and text */
+    gap: 8px;  /* Space between icon and text */
+    padding: 10px;
+    background: none;
+    border: none;
+    color:black;
+    font-size: 16px;
+    cursor: pointer;
+    width: 20.4vh;
+}
+
+button:hover {
+    background:grey;
+}
+
+
+/* Main content centered */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Aligns all content to the left */
+    justify-content: flex-start; /* Aligns everything to the top */
+    height: 100vh; /* Ensures it takes full height */
+    padding: 20px; /* Adds space */
+    height: 100vh;
+}
+
+.search {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Aligns search bar to the left */
+    width: 100vh;
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+    height: auto; /* Adjust height to fit content */
+    position: relative; /* Enables absolute positioning for labels and filter */
+    margin-top: 20px; /* Creates space above the search bar */
+}
+
+.search-bar {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px; /* Creates space above the dropdowns */
+}
+
+.search-bar input {
+    padding: 8px;
+    width: 200px;
+    border: 1px solid #ccc;
+}
+
+.search-bar button {
+    padding: 8px;
+    background-color: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 30px;
+}
+
+/* New styling for labels and filter */
+.labels, .filter {
+    display: flex;
+   flex-direction: row;
+    border: 1px solid #ccc;
+    padding: 8px;
+    width: auto;
+    border: none; /* Adjust width dynamically */
+}
+
+/* Container to align labels and filter on the same row */
+.search-bottom {
+    display: flex;
+    gap: 10px; /* Spacing between labels and filter */
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 5px;
+}
+
+
+/* Dashboard Sections */
+.dashboard-sections {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+}
+
+
+
+h3 {
+    margin-top: 0;
+}
+.dash {
+    display: flex;  /* Enables flexbox */
+    align-items: flex-start;  /* Aligns content to the top */
+    justify-content: flex-start;  /* Aligns content to the left */
+    width: 100vh;  
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+    height: 10vh;
+    font-size: 30px;
+
+}
+.search{
+    width: 100vh;  
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    height: 10vh;
+}
+
+
+.upload-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 1000;
+}
+
+.upload-content {
+    text-align: center;
+}
+
+.drop-area {
+    width: 400px;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    background-color: white;
+    cursor: pointer;
+}
+
+.drop-area.dragover {
+    background-color: #e8f5e9;
+}
+
+.file-preview {
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.file-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.file-info p {
+    margin: 5px 0;
+}
+
+.remove-btn {
+    background: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.remove-btn:hover {
+    background: darkred;
+}
+

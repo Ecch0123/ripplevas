@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+
+<head><title>Main Dashboard</title></head>
+
+<link rel="stylesheet"  href="main.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js";
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+
+
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<body>
+
+    <div class="header" id="header">
+        <a href="https://crm.theripplevas.com/" target="_blank">
+            <img src="Logo.png">
+        </a>
+        Ripple VAs Fill and Sign
+    </div>
+
+    <!-- Wrap everything inside a container -->
+    <div class="container">
+        <!-- Sidebar Navigation -->
+         
+        <div class="navbar">
+
+            <div class="upload">
+                <button onclick="toggleUploadContainer()" title="Select New Document">📂 New Document</button>
+            </div>
+
+            <ul>
+                
+                <button onclick="showDashboard()" title="Dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </button>
+                <button onclick="inbox()" title="Inbox">
+                    <i class="fas fa-inbox"></i> Inbox
+                </button>
+                <button onclick="sent()" title="Sent">
+                    <i class="fas fa-paper-plane"></i> Sent
+                </button>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="dashboard">
+            <div class="dash">
+                <h2>Dashboard</h2>
+            </div>
+            <div class="search">
+                <div class="search-bar">
+                    <input type="text" id="search" placeholder="Search...">
+                    <button onclick="searchFunction()"><i class="fas fa-search"></i></button>
+                </div>
+            
+                <!-- New div to align labels and filter at the bottom right -->
+                <div class="search-bottom">
+                    <div class="labels">
+                        <select>
+                            <option value=""disabled selected>Labels</option>
+                            <option value="all">Work</option>
+                            <option value="unread">Personal</option>
+                            <option value="important">Important</option>
+                        </select>
+                    </div>
+            
+                    <div class="filter">
+                        <select>
+                            <option value=""disabled selected>Filter</option>
+                            <option value="all">All</option>
+                            <option value="unread">Unread</option>
+                            <option value="important">Important</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            
+            
+            
+            <div class="dashboard-sections">
+               
+
+                <div class="reminder">
+                    <h3>Reminders</h3>
+                    <ul>
+                        <li><i class="fas fa-bell"></i> Meeting at 3 PM</li>
+                        <li><i class="fas fa-bell"></i> Project Deadline Tomorrow</li>
+                    </ul>
+                </div>        
+            </div>
+        
+        
+        </div>
+
+        <div class="upload-container">
+            <div class="upload-content">
+                <div id="drop-area" class="drop-area">
+                    <input type="file" id="pdfInput" accept="application/pdf" hidden>
+                    <label for="pdfInput" class="file-label">
+                        <span class="file-btn">📂 Select Files</span>
+                        <p>or drag files here</p>
+                    </label>
+                </div>
+            </div>
+        
+            <!-- Display Selected File -->
+            <div id="fileDisplayArea"></div>
+        
+            <!-- Create Document Button (Hidden by Default) -->
+            <button id="createDocumentBtn" style="display: none;" onclick="redirectToIndex()">Create Document</button>
+        </div>
+        
+        <script>
+            let selectedFile = null;
+        
+            document.getElementById("pdfInput").addEventListener("change", function (event) {
+                const file = event.target.files[0];
+        
+                if (file) {
+                    selectedFile = file;
+                    displaySelectedFile(file);
+                    document.getElementById("createDocumentBtn").style.display = "block";
+                }
+            });
+        
+            function displaySelectedFile(file) {
+                const fileDisplayArea = document.getElementById("fileDisplayArea");
+                fileDisplayArea.innerHTML = `
+                    <div style="border: 1px solid #ddd; padding: 10px; margin-top: 10px;">
+                        <p><strong>${file.name}</strong></p>
+                        <p>Size: ${(file.size / 1024).toFixed(2)} KB</p>
+                    </div>
+                `;
+            }
+        
+            function redirectToIndex() {
+                if (!selectedFile) return;
+                
+                const reader = new FileReader();
+                reader.readAsDataURL(selectedFile);
+                reader.onload = function (e) {
+                    localStorage.setItem("uploadedPDF", e.target.result);
+                    window.location.href = "index.html";  // Redirect to index.html
+                };
+            }
+        </script>
+        
+           
+            
+            
+          <script>
+
+            
+            </script>
+   
+                <script src="main.js"></script>
+    </body>
+
+</html>
