@@ -35,8 +35,19 @@ document.addEventListener("click", function(event) {
     }
 });
 function preparesendRequest() {
-    document.getElementById('signRequestBtn').style.display = 'none'; // Hide signModal
-    document.getElementById('signRequestModal').style.display = 'block'; // Show request modal
+    document.getElementById('signRequestBtn').style.display = 'none'; 
+    document.getElementById("signRequestModal").style.display = "block";
+
 }
 
+function showSuccessModal() {
+    document.getElementById('signRequestModal').style.display = 'none'; 
+    document.getElementById("successModal").style.display = "block";
 
+}
+
+// ✅ Function to Hide the Modal on Clicking "OK"
+function okModal() {
+    
+    document.getElementById("successModal").style.display = "none";
+}

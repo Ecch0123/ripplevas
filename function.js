@@ -216,6 +216,7 @@ async function handlePDFUpload(event) {
 
             // ✅ Enable download button after successful PDF upload
             document.getElementById("download-btn").disabled = false;
+            
         };
 
         fileReader.readAsArrayBuffer(file);
@@ -3774,32 +3775,42 @@ function fieldcreateResizeHandles(fieldDiv) {
     });
     saveState();
 }
-function sendRequest() {
-    const signerNameInput = document.getElementById("signerName");
-    const signerEmailInput = document.getElementById("signerEmail");
 
-    if (!signerEmailInput) {
-        console.error("Email input field not found!");
+
+
+async function sendRequest() {
+    const fileInput = document.querySelector("#pdf-upload");
+    const signerName = document.querySelector("#signerName").value;
+    const signerEmail = document.querySelector("#signerEmail").value;
+
+    if (!fileInput.files.length) {
+        alert("Please upload a file before sending.");
         return;
     }
 
-    const signerName = signerNameInput.value;
-    const signerEmail = signerEmailInput.value;
-    const websiteLink = "https://demo.theripplevas.com/testing/";
+    const formData = new FormData();
+    formData.append("signerName", signerName);
+    formData.append("signerEmail", signerEmail);
+    formData.append("file", fileInput.files[0]);
 
-    if (!signerEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signerEmail)) {
-        alert("Please enter a valid email address.");
-        return;
+    try {
+        const response = await fetch("http://127.0.0.2:3001/send-email", {
+            method: "POST",
+            body: formData,
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            showSuccessModal();
+            console.log("✅ Email sent successfully, calling showSuccessModal()");
+            console.log("📄 Document Link:", result.link);
+        } else {
+            alert("❌ Error: " + result.error);
+        }   
+    } catch (error) {
+        console.error("❌ Request Error:", error);
+        alert("❌ Failed to send email.");
     }
-
-    console.log("Email Entered:", signerEmail); // Debugging
-
-    fetch("http://localhost:3000/send-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ signerName, signerEmail, websiteLink })
-    })
-    .then(response => response.json())
-    .then(data => alert(data.message))
-    .catch(error => console.error("Error:", error));
 }
+
+
