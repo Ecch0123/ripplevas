@@ -36,7 +36,7 @@ app.post('/send-email', upload.single('file'), async (req, res) => {
 
     console.log(`📧 Sending email to: ${signerEmail}`);
 
-    const fileUrl = `https://${req.hostname}:${PORT}/upload?file=${encodeURIComponent(uploadedFile.filename)}`;
+    const fileUrl = `https://ripplevas.onrender.com/upload?file=${encodeURIComponent(uploadedFile.filename)}`;
 
     const transporter = nodemailer.createTransport({
         service: 'gmail',
