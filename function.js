@@ -3794,7 +3794,7 @@ async function sendRequest() {
     formData.append("file", fileInput.files[0]);
 
     try {
-        const response = await fetch("http://127.0.0.2:3001/send-email", {
+        const response = await fetch("http://192.168.254.120:3001/send-email", {
             method: "POST",
             body: formData,
         });
