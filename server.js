@@ -56,25 +56,28 @@ app.post('/send-email', upload.single('file'), async (req, res) => {
 
 
 
-
     const mailOptions = {
         from: 'jericho.sosas23@gmail.com',
         to: signerEmail,
         subject: 'Sign Document Request',
         html: `
-    <div style="font-family: Arial, sans-serif; text-align: center; border: 2px solid #ccc; padding: 10px;">
-        <h2>Ripple VAs</h2>
-        <p><strong>Ripple VAs</strong> sent you <strong>TESTING</strong> to review and sign.</p>
-        <a href="${fileUrl}" style="display: inline-block; padding: 10px 20px; font-size: 16px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
-            View Document
-        </a>
-        <p>Hi ${signerName},</p>
-        <p>Please see the attached document.</p>
-    </div>
-`
-
+            <div style="font-family: Arial, sans-serif; text-align: center; border: 2px solid rgb(0, 194, 223); padding: 10px;">
+                <h2 style="color: rgb(51, 204, 210);">Ripple VAs</h2>
+                <p style="color: rgb(51, 204, 210);">
+                    <strong>Ripple VAs</strong> sent you <strong>TESTING</strong> to review and sign.
+                </p>
+                <a href="${fileUrl}" 
+                   style="display: inline-block; padding: 10px 20px; font-size: 16px; 
+                          background-color: #007bff; color: white; text-decoration: none; 
+                          border-radius: 5px;">
+                   View Document
+                </a>
+                <p style="color: rgb(51, 204, 210);">Hi ${signerName}</p>
+                <p>Please see the attached document.</p>
+            </div>
+        `
     };
-
+    
     try {
         const info = await transporter.sendMail(mailOptions);
         console.log(`✅ Email sent successfully to ${signerEmail}`);
