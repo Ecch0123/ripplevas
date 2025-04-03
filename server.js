@@ -58,7 +58,7 @@ app.post('/send-email', upload.single('file'), async (req, res) => {
 
 
     const mailOptions = {
-        from: user,
+        from: 'jericho.sosas23@gmail.com',
         to: signerEmail,
         subject: 'Sign Document Request',
         html: `
